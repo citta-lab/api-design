@@ -12,4 +12,20 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
-export const start = () => {}
+// example to send message when / is hit
+app.get('/', (req, res) => {
+  res.send({ message: 'hello' })
+})
+
+// example to post on /
+app.post('/', (req, res) => {
+  console.log(req.body)
+  res.send({ message: 'ok' })
+})
+
+// listening on post
+export const start = () => {
+  app.listen(3000, () => {
+    console.log('server running on port :3000')
+  })
+}
