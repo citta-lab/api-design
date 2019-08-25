@@ -3,7 +3,10 @@ import { json, urlencoded } from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
 
+import itemRouter from '../src/resources/item/item.router'
+
 export const app = express()
+const router = express.Router()
 
 app.disable('x-powered-by')
 
@@ -12,13 +15,21 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
-// example to send message when / is hit
-app.get('/', (req, res) => {
-  res.send({ message: 'hello' })
+router.get('/me', (req, res) => {
+  res.send({ message: 'You called router me' })
 })
 
-app.get('/about', (req, res) => {
-  res.send({ message: 'About page will be added soon' })
+app.use('/about', router)
+app.use('/item', itemRouter)
+
+const log = (req, res, next) => {
+  console.log('logging')
+  next() // allows to continue executing the next script in the stack
+}
+
+// example to send message when / is hit
+app.get('/', log, (req, res) => {
+  res.send({ message: 'hello' })
 })
 
 // example to post on /
